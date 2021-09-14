@@ -5,14 +5,16 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
-namespace SimpleGame
+namespace Server
 {
     class Server
     {
         static void Main(string[] args)
         {
-            IPAddress localhost = IPAddress.Parse("127.0.0.1");
-            TcpListener listener = new TcpListener(localhost, 1330);
+            
+            
+            TcpListener listener = new TcpListener(IPAddress.Any, 42069);
+            listener.Start();
 
             while (true)
             {
@@ -20,6 +22,8 @@ namespace SimpleGame
 
                 //AcceptTcpClient waits for a connection from the client:
                 TcpClient client = listener.AcceptTcpClient();
+
+                Console.WriteLine("I am connected to " + IPAddress.Parse(((IPEndPoint)client.Client.RemoteEndPoint).Address.ToString()) + "on port number " + ((IPEndPoint)client.Client.RemoteEndPoint).Port.ToString());
 
                 // handle this client in a new worker-thread 
                 // and continue accepting new clients:
@@ -32,6 +36,7 @@ namespace SimpleGame
         static void HandleClientThread(object obj)
         {
             TcpClient client = obj as TcpClient;
+            WriteTextMessage(client,"hello");
 
             bool done = false;
             while (!done)
@@ -46,6 +51,9 @@ namespace SimpleGame
             client.Close();
             Console.WriteLine("Connection closed");
         }
+
+
+
 
 
         public static void WriteTextMessage(TcpClient client, string message)

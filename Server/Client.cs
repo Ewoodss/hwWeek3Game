@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace SimpleGame
+namespace Client
 {
     class Client
     {
         static void Main(string[] args)
         {
-            TcpClient client = new TcpClient("127.0.0.1", 1330);
+            TcpClient client = new TcpClient("192.168.2.3", 42069);
             bool done = false;
+
             Console.WriteLine("Type 'bye' to end connection");
             while (!done)
             {
